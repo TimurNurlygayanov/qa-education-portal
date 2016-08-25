@@ -24,9 +24,15 @@ def execute_task(queue):
         task_id = task['uid']
         tasks.update({'uid': task_id}, {'$set': {'status': 'in_progress'} })
 
-        cmd = "cp {0}{1} {2} ; python {2}{1}".format(UPLOAD_FOLDER,
-                                                     filename,
-                                                     "/tmp/")
+        if task['type'] == 'pytest':
+            template = """mkdir -p {2}/{3} ;
+                          cp {0}{1} {2}/{3}/answer.py ;
+                          python {2}/{3}/answer.py"""
+            cmd = template.format(UPLOAD_FOLDER, filename, "/tmp/qa-portal",
+                                  task_id)
+        else:
+            cmd = "exit 1"
+
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
         output = process.communicate()[0]
         returncode = process.returncode

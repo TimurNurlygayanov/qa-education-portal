@@ -47,6 +47,7 @@ def list_tasks():
 @app.route('/run_task', methods=['POST'])
 def run_task():
     if request.method == 'POST':
+        print request.data
         user = '' #str(request.data.get('user', ''))
         task_id = uuid.uuid4().hex
 
@@ -59,7 +60,7 @@ def run_task():
                                         filename))
 
             task = {'uid': task_id, 'user': user,
-                    'status': 'in_queue',
+                    'status': 'in_queue', 'type': 'pytest',
                     'task_file': task_file.filename,
                     'result': {'output': '', 'returncode': 0}}
 
