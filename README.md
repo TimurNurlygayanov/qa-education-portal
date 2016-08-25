@@ -1,5 +1,6 @@
 # Start Application
 python api_server.py
+
 python tasks_executor.py
 
 # Add new task to the queue
